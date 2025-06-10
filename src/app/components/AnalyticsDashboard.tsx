@@ -23,7 +23,7 @@ export function AnalyticsDashboard() {
         }
         const result: AnalyticsData[] = await response.json();
         setData(result);
-      } catch (err: any) {
+      } catch (err: unknown) {
         setError(err.message);
       } finally {
         setLoading(false);
