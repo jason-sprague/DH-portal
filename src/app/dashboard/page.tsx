@@ -1,5 +1,6 @@
 'use client';
 import { signOut } from 'next-auth/react';
+import { AnalyticsDashboard } from '../components/AnalyticsDashboard';
 
 export default function DashboardPage() {
   return (
@@ -26,7 +27,7 @@ export default function DashboardPage() {
           <h2 className="text-xl font-semibold mb-4">Sample Chart</h2>
           {/* Replace with actual chart component */}
           <div className="h-64 bg-gray-200 flex items-center justify-center">
-            Chart Placeholder
+            <AnalyticsDashboard />
           </div>
         </div>
       </div>
