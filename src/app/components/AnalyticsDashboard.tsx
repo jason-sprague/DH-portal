@@ -24,7 +24,9 @@ export function AnalyticsDashboard() {
         const result: AnalyticsData[] = await response.json();
         setData(result);
       } catch (err: unknown) {
+        if (err instanceof Error) {
         setError(err.message);
+        }
       } finally {
         setLoading(false);
       }
