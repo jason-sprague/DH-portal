@@ -12,8 +12,11 @@ export const {
 } = NextAuth({
   providers: [Google],
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
+    async signIn({ user }) {
       try {
+        if (!user.email) {
+          return false
+        }
         // Check if the user exists in the database
         const existingUser = await prisma.user.findUnique({
           where: { email: user.email },
