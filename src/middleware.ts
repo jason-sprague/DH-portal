@@ -19,7 +19,7 @@ export default auth((req) => {
     }
 
         if (!userHasCompany) {
-      return NextResponse.redirect(new URL('/', req.url));
+      return NextResponse.redirect(new URL('/wait', req.url));
     }
   }
 
@@ -27,6 +27,10 @@ export default auth((req) => {
   // redirect them to the dashboard for a better UX.
   if (isLoggedIn && userHasCompany && pathname === '/') {
     return NextResponse.redirect(new URL('/dashboard', req.url));
+  }
+
+  if (isLoggedIn && !userHasCompany && pathname === '/') {
+     return NextResponse.redirect(new URL('/wait', req.url));
   }
 
   // Allow the request to continue for all other cases
