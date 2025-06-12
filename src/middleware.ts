@@ -6,7 +6,7 @@ import { auth } from './auth'; // Adjust path if needed
 export default auth((req) => {
   const { auth } = req;
   const isLoggedIn = !!auth;
-
+  const userHasCompany = !!auth?.user.company;
   const { pathname } = req.nextUrl;
 
   // Check if the user is trying to access a protected route
@@ -17,11 +17,15 @@ export default auth((req) => {
     if (!isLoggedIn) {
       return NextResponse.redirect(new URL('/', req.url));
     }
+
+        if (!userHasCompany) {
+      return NextResponse.redirect(new URL('/', req.url));
+    }
   }
 
   // If a logged-in user tries to visit the home page,
   // redirect them to the dashboard for a better UX.
-  if (isLoggedIn && pathname === '/') {
+  if (isLoggedIn && userHasCompany && pathname === '/') {
     return NextResponse.redirect(new URL('/dashboard', req.url));
   }
 
@@ -29,7 +33,6 @@ export default auth((req) => {
   return NextResponse.next();
 });
 
-// The matcher remains the same, as it efficiently targets page routes.
 export const config = {
   matcher: [
     /*

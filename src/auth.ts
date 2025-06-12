@@ -1,8 +1,6 @@
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
-import { PrismaClient } from '../generated/prisma'
-
-const prisma = new PrismaClient();
+import prisma from "../lib/prisma";
 
 export const {
   handlers,
@@ -12,18 +10,50 @@ export const {
 } = NextAuth({
   providers: [Google],
   callbacks: {
+    /**
+     * The JWT callback is called first.
+     * It enriches the token with data from your database.
+     */
+    async jwt({ token, user }) {
+      // On initial sign-in, user object is available
+      if (user && user.email) {
+        const dbUser = await prisma.user.findUnique({
+          where: { email: user.email },
+          include: { company: true },
+        });
+
+        if (dbUser) {
+          token.id = dbUser.id;
+          token.company = dbUser.company;
+        }
+      }
+      return token;
+    },
+
+    /**
+     * The session callback is called next.
+     * It receives the token from the JWT callback and formats the session object.
+     */
+    async session({ session, token }) {
+      // The token contains our custom data.
+      // We pass it to the session object.
+      if (session.user) {
+        session.user.id = token.id as string;
+        session.user.company = token.company;
+      }
+      return session;
+    },
+    
     async signIn({ user }) {
       try {
         if (!user.email) {
-          return false
+          return false;
         }
-        // Check if the user exists in the database
         const existingUser = await prisma.user.findUnique({
           where: { email: user.email },
         });
 
         if (!existingUser) {
-          // Create a new user without a company
           await prisma.user.create({
             data: {
               email: user.email,
@@ -32,11 +62,10 @@ export const {
             },
           });
         }
-
-        return true; // Allow the sign-in
+        return true;
       } catch (error) {
         console.error("Error during sign-in:", error);
-        return false; // Prevent the sign-in
+        return false;
       }
     },
   },
