@@ -36,7 +36,7 @@ export async function GET() {
         },
       ],
       metrics: [{ name: 'activeUsers' }, { name: 'newUsers' }],
-      dimensions: [{ name: 'country' }],
+      dimensions: [{ name: 'deviceCategory' }],
     });
 
     const analyticsData =
