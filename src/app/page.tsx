@@ -11,7 +11,7 @@ export default async function Home() {
           </div>
         </div>
         <div className="card sign-up">
-        <h1 className="text-3xl">DH Portal</h1>
+        <h1 className="text-3xl">DH | Portal</h1>
         <form
           action={async () => {
             "use server"

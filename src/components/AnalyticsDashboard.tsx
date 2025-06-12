@@ -61,7 +61,7 @@ export function AnalyticsDashboard() {
   "var(--chart-5)",
 ];
 
-  const chartData =  data?.filter(item => item.country !== "(not set)").map((item, index) => ({
+  const chartData =  data?.map((item, index) => ({
     Country: item.country,
     visitors: parseInt(item.activeUsers, 10),
     fill: colorPalette[index % colorPalette.length],
