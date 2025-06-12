@@ -9,7 +9,7 @@ export default function DashboardPage() {
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-4">
       <h1 className="text-2xl font-bold mb-4">Welcome, {firstName}!</h1>
-      <p className="text-gray-600 mb-8">You're looking very handsome today. </p>
+      <p className="text-gray-600 mb-8">You&apos;re looking very handsome today. </p>
       {/* Add your dashboard components here */}
       <div className="w-full max-w-4xl">
         {/* Example chart component */}
