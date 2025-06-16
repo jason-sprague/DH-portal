@@ -6,7 +6,7 @@ import { type Company } from "@prisma/client";
 
 declare module "next-auth" {
   interface User extends DefaultUser {
-    company: Company | null;
+    companies: Company[];
   }
 
   interface Session extends DefaultSession {
@@ -17,6 +17,6 @@ declare module "next-auth" {
 declare module "next-auth/jwt" {
   /** Returned by the `jwt` callback and `auth`, when using JWT sessions */
   interface JWT extends DefaultJWT {
-    company: Company | null;
+    companies: Company[];
   }
 }

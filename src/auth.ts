@@ -19,12 +19,16 @@ export const {
       if (user && user.email) {
         const dbUser = await prisma.user.findUnique({
           where: { email: user.email },
-          include: { company: true },
+          include: {
+             companies: {
+              include: {
+                company: true,}
+             } },
         });
 
         if (dbUser) {
           token.id = dbUser.id;
-          token.company = dbUser.company;
+          token.companies = dbUser.companies.map((c) => c.company);
         }
       }
       return token;
@@ -39,7 +43,7 @@ export const {
       // We pass it to the session object.
       if (session.user) {
         session.user.id = token.id as string;
-        session.user.company = token.company;
+        session.user.companies = token.companies;
       }
       return session;
     },

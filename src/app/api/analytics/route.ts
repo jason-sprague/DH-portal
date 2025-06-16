@@ -3,22 +3,32 @@
 import { auth } from '../../../auth';
 import { type Session } from 'next-auth';
 import { BetaAnalyticsDataClient } from '@google-analytics/data';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 const client_email = process.env.GA_CLIENT_EMAIL;
 const private_key = process.env.GA_PRIVATE_KEY?.replace(/\\n/g, '\n');
 
-export async function GET() {
-  const session = (await auth()) as Session;
+export async function GET(req: NextRequest) {
 
-  if (!session?.user?.company?.gaPropertyId) {
+  const session = (await auth()) as Session;
+  // Get companyId from the request URL (e.g., /api/analytics?companyId=...)
+  const requestedCompanyId = req.nextUrl.searchParams.get('companyId');
+
+  if (!requestedCompanyId) {
+    return new NextResponse('Company ID is required.', { status: 400 });
+  }
+
+  // Find the selected company in the user's list of companies
+  const selectedCompany = session.user?.companies?.find(c => c.id === requestedCompanyId);
+
+  // Security: Ensure the requested company belongs to the user and has a gaPropertyId
+  const propertyId = selectedCompany?.gaPropertyId;
+
+  if (!propertyId) {
     return new NextResponse('Unauthorized or Google Analytics Property ID not found.', {
       status: 401,
     });
   }
-
-  const propertyId = session.user.company.gaPropertyId;
-
   const analyticsDataClient = new BetaAnalyticsDataClient({
     credentials: {
       client_email,

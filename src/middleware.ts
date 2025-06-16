@@ -1,12 +1,12 @@
 // /middleware.ts or /src/middleware.ts
 
 import { NextResponse } from 'next/server';
-import { auth } from './auth'; // Adjust path if needed
+import { auth } from './auth'; 
 
 export default auth((req) => {
   const { auth } = req;
   const isLoggedIn = !!auth;
-  const userHasCompany = !!auth?.user.company;
+  const userHasCompany = !!auth?.user.companies?.length;
   const { pathname } = req.nextUrl;
 
   // Check if the user is trying to access a protected route
@@ -18,7 +18,7 @@ export default auth((req) => {
       return NextResponse.redirect(new URL('/', req.url));
     }
 
-        if (!userHasCompany) {
+    if (!userHasCompany) {
       return NextResponse.redirect(new URL('/wait', req.url));
     }
   }
