@@ -8,7 +8,7 @@ export default function Wait() {
             <h1 className="text-3xl">Oh, Snap!</h1>
             <p>Please wait until we finish setting up your company in our onboarding process. If you think this is a mistake, too bad.</p>
             <button
-                onClick={() => signOut()}
+                onClick={() => signOut({ callbackUrl: '/' })}
                 style={{
                 padding: '10px 15px',
                 backgroundColor: '#dc3545',

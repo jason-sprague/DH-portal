@@ -25,17 +25,29 @@ interface AnalyticsData {
   newUsers: string;
 }
 
+interface AnalyticsDashboardProps {
+  selectedCompanyId: string;
+}
+
 export const description = "A simple pie chart"
 
-export function AnalyticsDashboard() {
+export function AnalyticsDashboard({ selectedCompanyId }: AnalyticsDashboardProps) {
   const [data, setData] = useState<AnalyticsData[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+// this runs whenever selectedCompanyId changes since I added it to the dependency array
   useEffect(() => {
     async function fetchData() {
+      // If no company is selected, do nothing.
+      if (!selectedCompanyId) return;
+
+      setLoading(true);
+      setError(null);
+
       try {
-        const response = await fetch('/api/analytics');
+        // Use the selectedCompanyId in the API request
+        const response = await fetch(`/api/analytics?companyId=${selectedCompanyId}`);
         if (!response.ok) {
           throw new Error('Failed to fetch analytics data');
         }
@@ -43,7 +55,7 @@ export function AnalyticsDashboard() {
         setData(result);
       } catch (err: unknown) {
         if (err instanceof Error) {
-        setError(err.message);
+          setError(err.message);
         }
       } finally {
         setLoading(false);
@@ -51,7 +63,7 @@ export function AnalyticsDashboard() {
     }
 
     fetchData();
-  }, []);
+  }, [selectedCompanyId]);
 
   const colorPalette = [
   "var(--chart-1)",
@@ -66,31 +78,32 @@ export function AnalyticsDashboard() {
     visitors: parseInt(item.activeUsers, 10),
     fill: colorPalette[index % colorPalette.length],
   }));
-const chartConfig = {
-  visitors: {
-    label: "Visitors",
-  },
-  desktop: {
-    label: "desktop",
-    color: "var(--chart-1)",
-  },
-  safari: {
-    label: "Safari",
-    color: "var(--chart-2)",
-  },
-  firefox: {
-    label: "Firefox",
-    color: "var(--chart-3)",
-  },
-  edge: {
-    label: "Edge",
-    color: "var(--chart-4)",
-  },
-  other: {
-    label: "Other",
-    color: "var(--chart-5)",
-  },
-} satisfies ChartConfig
+
+  const chartConfig = {
+    visitors: {
+      label: "Visitors",
+    },
+    desktop: {
+      label: "desktop",
+      color: "var(--chart-1)",
+    },
+    safari: {
+      label: "Safari",
+      color: "var(--chart-2)",
+    },
+    firefox: {
+      label: "Firefox",
+      color: "var(--chart-3)",
+    },
+    edge: {
+      label: "Edge",
+      color: "var(--chart-4)",
+    },
+    other: {
+      label: "Other",
+      color: "var(--chart-5)",
+    },
+  } satisfies ChartConfig
 
   console.log('Analytics Data:', data);
 
