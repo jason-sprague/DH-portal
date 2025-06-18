@@ -29,6 +29,7 @@ export const {
         if (dbUser) {
           token.id = dbUser.id;
           token.companies = dbUser.companies.map((c) => c.company);
+          token.role = dbUser.role; 
         }
       }
       return token;
@@ -44,6 +45,7 @@ export const {
       if (session.user) {
         session.user.id = token.id as string;
         session.user.companies = token.companies;
+         session.user.role = token.role;
       }
       return session;
     },

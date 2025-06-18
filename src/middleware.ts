@@ -6,8 +6,19 @@ import { auth } from './auth';
 export default auth((req) => {
   const { auth } = req;
   const isLoggedIn = !!auth;
+  const userRole = auth?.user?.role
   const userHasCompany = !!auth?.user.companies?.length;
   const { pathname } = req.nextUrl;
+
+    const isAccessingAdminRoute = pathname.startsWith('/admin');
+  if (isAccessingAdminRoute) {
+    if (userRole !== 'ADMIN') {
+      // Redirect non-admins away from admin routes
+      return NextResponse.redirect(new URL('/dashboard', req.url));
+    }
+    // Allow admins to proceed
+    return NextResponse.next();
+  }
 
   // Check if the user is trying to access a protected route
   const isAccessingProtectedRoute = pathname.startsWith('/dashboard');
