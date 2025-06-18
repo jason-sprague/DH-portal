@@ -20,11 +20,10 @@ import {
 
 // Define the structure of our analytics data
 interface AnalyticsData {
-  country: string;
+  deviceCategory: string; // Correct property name
   activeUsers: string;
   newUsers: string;
 }
-
 interface AnalyticsDashboardProps {
   selectedCompanyId: string;
 }
@@ -73,11 +72,11 @@ export function AnalyticsDashboard({ selectedCompanyId }: AnalyticsDashboardProp
   "var(--chart-5)",
 ];
 
-  const chartData =  data?.map((item, index) => ({
-    Country: item.country,
-    visitors: parseInt(item.activeUsers, 10),
-    fill: colorPalette[index % colorPalette.length],
-  }));
+const chartData =  data?.map((item, index) => ({
+  deviceCategory: item.deviceCategory,
+  visitors: parseInt(item.activeUsers, 10),
+  fill: colorPalette[index % colorPalette.length],
+}));
 
   const chartConfig = {
     visitors: {
@@ -129,7 +128,7 @@ export function AnalyticsDashboard({ selectedCompanyId }: AnalyticsDashboardProp
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Pie data={chartData} dataKey="visitors" nameKey="Country" />
+            <Pie data={chartData} dataKey="visitors" nameKey="deviceCategory" />
           </PieChart>
         </ChartContainer>
       </CardContent>
