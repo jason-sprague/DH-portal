@@ -23,6 +23,8 @@ export default function AdminDashboardPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const [flashingCard, setFlashingCard] = useState<'company' | 'user' | null>(null);
+
   // State for Company form
   const [newCompanyName, setNewCompanyName] = useState('');
   const [newCompanyAccessLevel, setNewCompanyAccessLevel] = useState<AccessLevel>('STANDARD');
@@ -98,6 +100,10 @@ export default function AdminDashboardPage() {
   };
 
   const handleEditCompany = (company: CompanyWithUsers) => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setFlashingCard('company');
+    setTimeout(() => setFlashingCard(null), 1000); // Reset after animation duration
+
     setEditingCompany(company);
     setNewCompanyName(company.name);
     setNewCompanyAccessLevel(company.accessLevel);
@@ -180,6 +186,10 @@ export default function AdminDashboardPage() {
   };
 
   const handleEditUser = (user: UserWithCompanies) => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setFlashingCard('user');
+    setTimeout(() => setFlashingCard(null), 1000); // Reset after animation duration
+
     setEditingUser(user);
     setNewUserEmail(user.email);
     setNewUserName(user.name || '');
@@ -255,7 +265,7 @@ export default function AdminDashboardPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Company Management Form */}
-        <Card className="flex flex-col bg-gray-800 text-white">
+        <Card className={`flex flex-col bg-gray-800 text-white ${flashingCard === 'company' ? 'flash-effect' : ''}`}>
           <CardHeader>
             <CardTitle>{editingCompany ? 'Edit Company' : 'Create New Company'}</CardTitle>
           </CardHeader>
@@ -311,7 +321,7 @@ export default function AdminDashboardPage() {
         </Card>
 
         {/* User Management Form */}
-        <Card className="flex flex-col bg-gray-800 text-white">
+        <Card className={`flex flex-col bg-gray-800 text-white ${flashingCard === 'user' ? 'flash-effect' : ''}`}>
           <CardHeader>
             <CardTitle>{editingUser ? 'Edit User' : 'Create New User'}</CardTitle>
           </CardHeader>
