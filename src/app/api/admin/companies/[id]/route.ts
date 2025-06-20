@@ -2,21 +2,16 @@ import { NextResponse } from 'next/server';
 import prisma from '@/../lib/prisma';
 import { auth } from '@/auth';
 
-// Define the context type
-interface RouteContext {
-  params: {
-    id: string;
-  };
-}
-
-// PUT (update) a specific company
-export async function PUT(request: Request, context: RouteContext) {
+export async function PUT(
+  request: Request,
+  context: { params: Promise<{ id: string }> }
+) {
   const session = await auth();
   if (session?.user?.role !== 'ADMIN') {
     return new NextResponse('Unauthorized', { status: 401 });
   }
-  const params = await context.params;
-  const { id } = params;
+  
+  const { id } = await context.params;
 
   try {
     const data = await request.json();
@@ -35,22 +30,21 @@ export async function PUT(request: Request, context: RouteContext) {
   }
 }
 
-// DELETE a specific company
-export async function DELETE(request: Request, context: RouteContext) {
+export async function DELETE(
+  request: Request,
+  context: { params: Promise<{ id: string }> }
+) {
   const session = await auth();
   if (session?.user?.role !== 'ADMIN') {
     return new NextResponse('Unauthorized', { status: 401 });
   }
-  const params = await context.params;
-  const { id } = params;
+  
+  const { id } = await context.params;
 
   try {
-    // First, dissociate users from the company
     await prisma.companiesOnUsers.deleteMany({
         where: { companyId: id },
     });
-
-    // Then, delete the company
     await prisma.company.delete({
       where: { id: id },
     });
