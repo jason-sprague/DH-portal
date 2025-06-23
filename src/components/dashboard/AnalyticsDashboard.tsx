@@ -20,7 +20,7 @@ import {
 
 // Define the structure of our analytics data
 interface AnalyticsData {
-  deviceCategory: string; // Correct property name
+  deviceCategory: string;
   activeUsers: string;
   newUsers: string;
 }
@@ -103,8 +103,6 @@ const chartData =  data?.map((item, index) => ({
       color: "var(--chart-5)",
     },
   } satisfies ChartConfig
-
-  console.log('Analytics Data:', data);
 
   if (loading) return <div>Loading Analytics Data...</div>;
   if (error) return <div>Error: {error}</div>;
