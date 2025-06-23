@@ -31,7 +31,7 @@ export default function DashboardClient({ companies, initialCompanyId, userName 
 
   return (
     <main className="flex min-h-screen flex-col p-4">
-      <div className="header">
+      <div className="header flex-wrap">
         <div>
           <h1 className="text-2xl font-bold mb-4">Welcome, {firstName}!</h1>
           <p className="">You&apos;re looking very handsome today. </p>
