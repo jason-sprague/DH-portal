@@ -12,7 +12,6 @@ export const metadata: Metadata = {
   title: "DH Portal",
   description: "Client Portal for Dykstra | Hamel",
   manifest: "/manifest.json", 
-  themeColor: "#000000",
 };
 
 export default function RootLayout({
@@ -22,6 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+  
       <body className={`${outfit.variable} ${outfit.variable}`}>
         <SessionProvider>
         {children}
