@@ -3,7 +3,7 @@ import { auth } from '../../../../auth';
 import { type Session } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { CallRailCallsApiResponse, CallRailApiError } from '@/types/callrail';
-import prisma from '@/../lib/prisma';
+import prisma from '@/lib/prisma';
 
 export async function GET(request: NextRequest) {
 
