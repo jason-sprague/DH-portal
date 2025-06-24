@@ -100,7 +100,7 @@ export async function GET(request: NextRequest) {
     const data: CallRailCallsApiResponse = await response.json();
     return NextResponse.json(data, { status: 200 });
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('Server error fetching calls from CallRail (network/unexpected):', error);
     return NextResponse.json(
       { message: 'Internal Server Error', details: error.message } as CallRailApiError,
