@@ -23,15 +23,24 @@ export default async function Home() {
           </div>
 
           <div className="card sign-up">
-          <h2 className="text-3xl">Current Member</h2>
-          <form
-            action={async () => {
-              "use server"
-              await signIn("google", { callbackUrl: "/dashboard" })
-            }}
-          >
-            <button className="button" type="submit">Login</button>
-          </form>
+            <h2 className="text-3xl">Current Member</h2>
+            <form
+              action={async () => {
+                "use server"
+                await signIn("google", { callbackUrl: "/dashboard" })
+              }}
+            >
+              <button className="button" type="submit">Login with Google</button>
+            </form>
+
+            <form
+              action={async () => {
+                "use server"
+                await signIn("facebook", { callbackUrl: "/dashboard" })
+              }}
+            >
+              <button className="button" type="submit">Login with Facebook</button>
+            </form>
           </div>
 
         </div>
