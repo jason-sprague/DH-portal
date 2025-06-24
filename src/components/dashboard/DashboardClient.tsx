@@ -5,6 +5,7 @@
 import { useState, useEffect } from 'react';
 import { signOut } from 'next-auth/react';
 import { AnalyticsDashboard } from './AnalyticsDashboard';
+import CallrailCalls from './callrail/Calls';
 import Image from 'next/image';
 import { type Company } from '../../../generated/prisma';
  // Import the Company type
@@ -68,7 +69,10 @@ export default function DashboardClient({ companies, initialCompanyId, userName 
       </div>
 
       {selectedCompanyId ? (
-        <AnalyticsDashboard selectedCompanyId={selectedCompanyId} />
+        <>
+          <AnalyticsDashboard selectedCompanyId={selectedCompanyId} />
+          <CallrailCalls selectedCompanyId={selectedCompanyId} />
+        </>
       ) : (
         <div>Loading...</div>
       )}

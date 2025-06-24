@@ -107,8 +107,6 @@ const chartData =  data?.map((item, index) => ({
   if (loading) return <div>Loading Analytics Data...</div>;
   if (error) return <div>Error: {error}</div>;
 
-  
-
   return (
     <>
       <Card className="flex flex-col p-5 m-10">
