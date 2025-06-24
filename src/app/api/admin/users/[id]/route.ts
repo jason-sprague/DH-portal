@@ -1,6 +1,6 @@
 // src/app/api/admin/users/[id]/route.ts
 import { NextResponse } from 'next/server';
-import prisma from '@/../lib/prisma';
+import prisma from '@/lib/prisma';
 import { auth } from '@/auth';
 
 // Type the context argument inline for the PUT function.
@@ -54,10 +54,20 @@ export async function DELETE(
     
     const { id } = await context.params;
     
-    try {
-        await prisma.user.delete({
+   try {
+        // Using a transaction to first delete relationships, then the user.
+        await prisma.$transaction(async (tx) => {
+          // 1. Delete the user's links to any companies in the join table.
+          await tx.companiesOnUsers.deleteMany({
+            where: { userId: id },
+          });
+    
+          // 2. Now that the user is no longer restricted, delete the user itself.
+          await tx.user.delete({
             where: { id: id },
+          });
         });
+
         return new NextResponse(null, { status: 204 });
     } catch (error) {
         console.error(`Failed to delete user ${id}:`, error);

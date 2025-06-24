@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
-import prisma from "../lib/prisma";
+import Facebook from "next-auth/providers/facebook";
+import prisma from "./lib/prisma";
 
 export const {
   handlers,
@@ -8,7 +9,7 @@ export const {
   signOut,
   auth,
 } = NextAuth({
-  providers: [Google],
+  providers: [Google, Facebook],
   callbacks: {
     /**
      * The JWT callback is called first.

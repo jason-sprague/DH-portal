@@ -20,7 +20,7 @@ import {
 
 // Define the structure of our analytics data
 interface AnalyticsData {
-  deviceCategory: string; // Correct property name
+  deviceCategory: string;
   activeUsers: string;
   newUsers: string;
 }
