@@ -20,7 +20,6 @@ export default function CallrailCalls({ selectedCompanyId }: CallrailCallsProps)
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState<boolean>(true); // To control "Load More" button visibility
-  const [paginationPage, setPaginationPage] = useState<number>(0);
 
   const callsColumns: ColumnDef<Call>[] = [
     {
@@ -112,7 +111,7 @@ export default function CallrailCalls({ selectedCompanyId }: CallrailCallsProps)
       {calls.length === 0 ? (
         <p>No calls found.</p>
       ) : (
-        <DataTable columns={callsColumns} data={calls} paginationPage={paginationPage} />
+        <DataTable columns={callsColumns} data={calls} />
       )}
       {!loading && hasMore && (
         <Button onClick={handleLoadMore}>Load More Calls</Button>

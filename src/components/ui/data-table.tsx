@@ -30,7 +30,6 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
   columns,
   data,
-  paginationPage,
 }: DataTableProps<TData, TValue>) {
 
   const table = useReactTable({
@@ -38,12 +37,6 @@ export function DataTable<TData, TValue>({
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    initialState: {
-      pagination: {
-        pageIndex: paginationPage, //custom initial page index
-        pageSize: 10, //custom default page size
-      },
-    },
   })
 
   return (
