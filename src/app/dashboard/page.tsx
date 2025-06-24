@@ -2,7 +2,7 @@
 
 import { auth } from '@/auth'; // Server-side auth
 import { redirect } from 'next/navigation';
-import prisma from '@/../lib/prisma'; // Server-side DB access
+import prisma from '@/lib/prisma'; // Server-side DB access
 import DashboardClient from '@/components/dashboard/DashboardClient'; // Your new client component
 import { type Company } from '../../../generated/prisma';
 

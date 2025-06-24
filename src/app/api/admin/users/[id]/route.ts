@@ -1,6 +1,6 @@
 // src/app/api/admin/users/[id]/route.ts
 import { NextResponse } from 'next/server';
-import prisma from '@/../lib/prisma';
+import prisma from '@/lib/prisma';
 import { auth } from '@/auth';
 
 // Type the context argument inline for the PUT function.

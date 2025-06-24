@@ -4,7 +4,7 @@ import { auth } from '../../../auth';
 import { type Session } from 'next-auth';
 import { BetaAnalyticsDataClient } from '@google-analytics/data';
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/../lib/prisma';
+import prisma from '@/lib/prisma';
 
 const client_email = process.env.GA_CLIENT_EMAIL;
 const private_key = process.env.GA_PRIVATE_KEY?.replace(/\\n/g, '\n');
