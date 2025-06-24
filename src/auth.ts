@@ -10,6 +10,9 @@ export const {
   auth,
 } = NextAuth({
   providers: [Google, Facebook],
+  session: {
+    maxAge: 604800
+  },
   callbacks: {
     /**
      * The JWT callback is called first.
