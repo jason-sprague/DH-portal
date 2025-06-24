@@ -36,13 +36,15 @@ model User {
 }
 
 model Company {
-  id           String             @id @default(cuid())
-  name         String             @unique
-  accessLevel  AccessLevel        @default(STANDARD)
-  gaPropertyId String?
-  createdAt    DateTime           @default(now())
-  updatedAt    DateTime           @updatedAt
-  users        CompaniesOnUsers[]
+  id                String             @id @default(cuid())
+  name              String             @unique
+  accessLevel       AccessLevel        @default(STANDARD)
+  gaPropertyId      String?
+  callrailApiKey    String?
+  callrailAccountId String?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  users             CompaniesOnUsers[]
 }
 
 model CompaniesOnUsers {

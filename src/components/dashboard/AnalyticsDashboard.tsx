@@ -104,12 +104,8 @@ const chartData =  data?.map((item, index) => ({
     },
   } satisfies ChartConfig
 
-  console.log('Analytics Data:', data);
-
   if (loading) return <div>Loading Analytics Data...</div>;
   if (error) return <div>Error: {error}</div>;
-
-  
 
   return (
     <>
