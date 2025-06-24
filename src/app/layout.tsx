@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import { SessionProvider } from "next-auth/react"
+import FirebaseMessagingSetup from "@/components/FirebaseMessagingSetup";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -24,6 +25,7 @@ export default function RootLayout({
   
       <body className={`${outfit.variable} ${outfit.variable}`}>
         <SessionProvider>
+          <FirebaseMessagingSetup />
         {children}
         </SessionProvider>
       </body>
