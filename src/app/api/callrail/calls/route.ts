@@ -80,7 +80,7 @@ export async function GET(request: NextRequest) {
       const rawResponseText = await response.text();
       console.error(`CallRail API Error (${response.status}):`, rawResponseText);
 
-      let errorDetails: any = rawResponseText;
+      let errorDetails = rawResponseText;
       try {
         errorDetails = JSON.parse(rawResponseText); // Try to parse as JSON if it is
       } catch (parseError) {
