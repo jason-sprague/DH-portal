@@ -41,6 +41,16 @@ export default async function Home() {
             >
               <button className="button" type="submit">Login with Facebook</button>
             </form>
+
+            <form
+              action={async (formData) => {
+                "use server"
+                await signIn("resend", formData)
+              }}
+            >
+              <input type="email" name="email" placeholder="Enter your email" />
+              <button type="submit">Send Magic Link</button>
+            </form>
           </div>
 
         </div>
