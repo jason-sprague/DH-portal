@@ -1,7 +1,10 @@
-import NextAuth from "next-auth";
-import Google from "next-auth/providers/google";
-import Facebook from "next-auth/providers/facebook";
-import prisma from "./lib/prisma";
+import NextAuth from 'next-auth';
+import { PrismaAdapter } from '@auth/prisma-adapter';
+import prisma from './lib/prisma';
+import { authConfig } from './auth.config';
+import Google from 'next-auth/providers/google';
+import Facebook from 'next-auth/providers/facebook';
+import Resend from 'next-auth/providers/resend';
 
 export const {
   handlers,
@@ -9,74 +12,45 @@ export const {
   signOut,
   auth,
 } = NextAuth({
-  providers: [Google, Facebook],
-  session: {
-    maxAge: 604800
-  },
+  ...authConfig, // Spread the base config (including the 'authorized' callback)
+  adapter: PrismaAdapter(prisma),
+  providers: [
+    Resend({
+      apiKey: process.env.AUTH_RESEND_KEY,
+      from: "no-reply@dykstrahamel.com"
+    }),
+    Google({
+      allowDangerousEmailAccountLinking: true
+    }), 
+    Facebook({
+      allowDangerousEmailAccountLinking: true
+    }), 
+  ],
+  session: { strategy: 'jwt' },
   callbacks: {
-    /**
-     * The JWT callback is called first.
-     * It enriches the token with data from your database.
-     */
-    async jwt({ token, user }) {
-      // On initial sign-in, user object is available
-      if (user && user.email) {
-        const dbUser = await prisma.user.findUnique({
-          where: { email: user.email },
+    ...authConfig.callbacks, // Keep the authorized callback from the base config
+
+    // The session callback here OVERRIDES the simple one from auth.config.ts.
+    // This version accesses the database to add the user's companies.
+    async session({ session, token }) {
+      if (token.sub && session.user) {
+        session.user.id = token.sub;
+        session.user.role = token.role;
+
+        const userWithCompanies = await prisma.user.findUnique({
+          where: { id: token.sub },
           include: {
-             companies: {
+            companies: {
               include: {
-                company: true,}
-             } },
+                company: true,
+              },
+            },
+          },
         });
 
-        if (dbUser) {
-          token.id = dbUser.id;
-          token.companies = dbUser.companies.map((c) => c.company);
-          token.role = dbUser.role; 
-        }
-      }
-      return token;
-    },
-
-    /**
-     * The session callback is called next.
-     * It receives the token from the JWT callback and formats the session object.
-     */
-    async session({ session, token }) {
-      // The token contains our custom data.
-      // We pass it to the session object.
-      if (session.user) {
-        session.user.id = token.id as string;
-        session.user.companies = token.companies;
-         session.user.role = token.role;
+        session.user.companies = userWithCompanies?.companies.map(c => c.company) ?? [];
       }
       return session;
-    },
-    
-    async signIn({ user }) {
-      try {
-        if (!user.email) {
-          return false;
-        }
-        const existingUser = await prisma.user.findUnique({
-          where: { email: user.email },
-        });
-
-        if (!existingUser) {
-          await prisma.user.create({
-            data: {
-              email: user.email,
-              name: user.name,
-              image: user.image,
-            },
-          });
-        }
-        return true;
-      } catch (error) {
-        console.error("Error during sign-in:", error);
-        return false;
-      }
     },
   },
 });
