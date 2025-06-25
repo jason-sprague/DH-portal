@@ -191,7 +191,7 @@ export default function AdminDashboardPage() {
     setTimeout(() => setFlashingCard(null), 1000); // Reset after animation duration
 
     setEditingUser(user);
-    setNewUserEmail(user.email);
+    setNewUserEmail(user.email || '');
     setNewUserName(user.name || '');
     setNewUserImage(user.image || '');
     setNewUserRole(user.role);
